@@ -1,0 +1,15 @@
+# Secrets and tokens — NEVER commit these
+.env
+token.json
+
+# Runtime artifacts
+qbo-audit.jsonl
+.reconcile-checkpoint.json
+snapshots/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# OS
+.DS_Store

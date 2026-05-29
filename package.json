@@ -1,0 +1,28 @@
+{
+  "name": "quickbooks-read-only-skill",
+  "version": "1.0.0",
+  "description": "A safety wrapper + Claude skill that makes the full-access QuickBooks Online API behave read-only by default: writes are blocked unless explicitly enabled, every call is classified and audit-logged, and a reconcile tool catches changes the tooling did not make.",
+  "main": "qbo-client.js",
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "authorize": "node authorize.js",
+    "verify": "node test-connection.js",
+    "reconcile": "node qbo-audit-reconcile.js"
+  },
+  "engines": {
+    "node": ">=20.12"
+  },
+  "keywords": [
+    "quickbooks",
+    "qbo",
+    "intuit",
+    "read-only",
+    "claude",
+    "ai-safety",
+    "audit-log"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "intuit-oauth": "^4.2.2"
+  }
+}
