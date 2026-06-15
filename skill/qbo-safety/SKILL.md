@@ -31,7 +31,10 @@ There is no read-only API key. These rules are mandatory for every QBO interacti
 
 6. **Report after every call and every run.** Tell the user each call's classification
    (READ / CREATE / EDIT / DELETE) and outcome, and surface the end-of-run summary from
-   `printSummary()`.
+   `printSummary()`. Over a long session this reporting habit can drift — the optional
+   `qbo-audit-hook.js` PostToolUse hook (see INSTALL.md) makes it reliable by reading the
+   audit-log delta after each call and injecting the `READ n · write n` tally into context.
+   The hook is a reminder, not a gate; you must still surface the tally in your reply.
 
 7. **The wrapper is fail-closed and you must not bypass it.** It defaults to dry-run,
    enforces a realm guard and a 25-write blast-radius cap, and logs every call to

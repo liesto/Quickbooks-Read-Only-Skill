@@ -5,6 +5,7 @@ token.json
 # Runtime artifacts
 qbo-audit.jsonl
 .reconcile-checkpoint.json
+.audit-hook-state.json
 snapshots/
 
 # Node

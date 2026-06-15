@@ -117,6 +117,52 @@ That's it. When you ask Claude to query QuickBooks in this project, it will rout
 
 ---
 
+## 7. (Optional) Install the audit-tally hook
+
+Rule 6 asks Claude to report the READ/write tally after every QBO call. Over a long
+session that habit can drift. `qbo-audit-hook.js` is a Claude Code **PostToolUse** hook
+that makes it reliable: after each Bash tool call it reads any new lines appended to
+`qbo-audit.jsonl` and injects a `READ n · write n` tally into Claude's context, so the
+numbers are in front of it (already computed) when it replies.
+
+It is purely additive — it does **not** gate writes (the wrapper does that) and cannot
+author Claude's reply; it only surfaces the tally. It self-gates on new audit lines, so
+it stays silent on non-QBO Bash calls and never blocks the tool flow.
+
+Add this to `~/.claude/settings.json` (merge into any existing `hooks`), pointing the
+command at wherever you cloned this repo:
+
+```json
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"/absolute/path/to/Quickbooks-Read-Only-Skill/qbo-audit-hook.js\"",
+            "timeout": 10,
+            "statusMessage": "Checking QBO audit tally"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+If your audit log lives somewhere other than next to the script, point the hook at it
+with the `QBO_AUDIT_LOG` env var (and optionally `QBO_AUDIT_HOOK_STATE` for the
+high-water-mark file). The hook tracks how many audit lines it has already reported in a
+small state file (`.audit-hook-state.json`, gitignored) so each firing reports only that
+run's delta. On first run with no state it syncs silently rather than replaying history.
+
+After editing settings, open `/hooks` once (or restart Claude Code) so the new hook is
+picked up.
+
+---
+
 ## Daily use
 
 **Read (the default — nothing special needed):**
